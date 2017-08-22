@@ -6,8 +6,8 @@ After=network.target
 Type=simple
 Restart=on-failure
 
-User=discovery
-Group=discovery
+User=bitmark
+Group=bitmark
 
 PIDFile=/run/bitmark-trade.pid
 
@@ -15,7 +15,7 @@ StandardOutput=journal
 StandardError=journal
 
 WorkingDirectory=/var/lib/bitmark-trade
-ExecStart=/usr/sbin/discovery --conf=/etc/bitmark-trade.conf
+ExecStart=/usr/sbin/bitmark-trade --conf=/etc/bitmark-trade.conf
 
 [Install]
 WantedBy=multi-user.target
