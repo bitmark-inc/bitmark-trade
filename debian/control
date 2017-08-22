@@ -3,7 +3,11 @@ Section: non-free/admin
 Priority: optional
 Maintainer: Bitmark Developers <developers@bitmark.com>
 Uploaders: Bitmark Developers <developers@bitmark.com>
-Build-Depends:
+Build-Depends: debhelper (>=9),
+               dh-systemd,
+               libtool, pkg-config, build-essential, autoconf, automake,
+               golang [!powerpc],
+               gccgo [powerpc]
 Standards-Version: 3.9.6
 Homepage: https://bitmark.com
 
