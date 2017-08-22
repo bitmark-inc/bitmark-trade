@@ -1,0 +1,7 @@
+bitmark-trade (0.1-1) unstable; urgency=medium
+
+  * [added] creating a Bitmark account
+  * [added] issuing/transferring an Bitmark
+  * [added] downloading an asset
+
+ -- Linzy Hu <linzy@bitmark.com>  The, 22 Aug 2017 09:00:00 +0800

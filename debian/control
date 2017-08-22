@@ -1,0 +1,13 @@
+Source: bitmark-trade
+Section: non-free/admin
+Priority: optional
+Maintainer: Bitmark Developers <developers@bitmark.com>
+Uploaders: Bitmark Developers <developers@bitmark.com>
+Build-Depends:
+Standards-Version: 3.9.6
+Homepage: https://bitmark.com
+
+Package: bitmark-trade
+Architecture: linux-any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Bitmark trade service supports user account management, assets storage, and commerce functionalities for Bitmark trading.

@@ -1,0 +1,199 @@
+{
+	"ImportPath": "github.com/bitmark-inc/bitmark-trade",
+	"GoVersion": "go1.8",
+	"GodepVersion": "v79",
+	"Deps": [
+		{
+			"ImportPath": "github.com/bitmark-inc/bitmarkd/account",
+			"Comment": "v4.13-4-g752e7f4",
+			"Rev": "752e7f409cef3a21011bf48749d26573cf439240"
+		},
+		{
+			"ImportPath": "github.com/bitmark-inc/bitmarkd/currency",
+			"Comment": "v4.13-4-g752e7f4",
+			"Rev": "752e7f409cef3a21011bf48749d26573cf439240"
+		},
+		{
+			"ImportPath": "github.com/bitmark-inc/bitmarkd/fault",
+			"Comment": "v4.13-4-g752e7f4",
+			"Rev": "752e7f409cef3a21011bf48749d26573cf439240"
+		},
+		{
+			"ImportPath": "github.com/bitmark-inc/bitmarkd/merkle",
+			"Comment": "v4.13-4-g752e7f4",
+			"Rev": "752e7f409cef3a21011bf48749d26573cf439240"
+		},
+		{
+			"ImportPath": "github.com/bitmark-inc/bitmarkd/transactionrecord",
+			"Comment": "v4.13-4-g752e7f4",
+			"Rev": "752e7f409cef3a21011bf48749d26573cf439240"
+		},
+		{
+			"ImportPath": "github.com/bitmark-inc/bitmarkd/util",
+			"Comment": "v4.13-4-g752e7f4",
+			"Rev": "752e7f409cef3a21011bf48749d26573cf439240"
+		},
+		{
+			"ImportPath": "github.com/bitmark-inc/go-bitmarklib",
+			"Rev": "a50f43acd85bacc0ad5664d8e878db07ee730fea"
+		},
+		{
+			"ImportPath": "github.com/bitmark-inc/logger",
+			"Comment": "v2.0-4-g23c8b0e",
+			"Rev": "23c8b0e3f5ca2bec8ab8da13c9468f54a6e0cda9"
+		},
+		{
+			"ImportPath": "github.com/boltdb/bolt",
+			"Comment": "v1.3.0-58-ge9cf4fa",
+			"Rev": "e9cf4fae01b5a8ff89d0ec6b32f0d9c9f79aefdd"
+		},
+		{
+			"ImportPath": "github.com/cihub/seelog",
+			"Comment": "v2.6-31-gf561c5e",
+			"Rev": "f561c5e57575bb1e0a2167028b7339b3a8d16fb4"
+		},
+		{
+			"ImportPath": "github.com/cihub/seelog/archive",
+			"Comment": "v2.6-31-gf561c5e",
+			"Rev": "f561c5e57575bb1e0a2167028b7339b3a8d16fb4"
+		},
+		{
+			"ImportPath": "github.com/cihub/seelog/archive/gzip",
+			"Comment": "v2.6-31-gf561c5e",
+			"Rev": "f561c5e57575bb1e0a2167028b7339b3a8d16fb4"
+		},
+		{
+			"ImportPath": "github.com/cihub/seelog/archive/tar",
+			"Comment": "v2.6-31-gf561c5e",
+			"Rev": "f561c5e57575bb1e0a2167028b7339b3a8d16fb4"
+		},
+		{
+			"ImportPath": "github.com/cihub/seelog/archive/zip",
+			"Comment": "v2.6-31-gf561c5e",
+			"Rev": "f561c5e57575bb1e0a2167028b7339b3a8d16fb4"
+		},
+		{
+			"ImportPath": "github.com/gin-contrib/sse",
+			"Rev": "22d885f9ecc78bf4ee5d72b937e4bbcdc58e8cae"
+		},
+		{
+			"ImportPath": "github.com/gin-gonic/gin",
+			"Comment": "v1.2-81-gd39ed41",
+			"Rev": "d39ed41ab3795346f5f843ec31bc0138be07eaab"
+		},
+		{
+			"ImportPath": "github.com/gin-gonic/gin/binding",
+			"Comment": "v1.2-81-gd39ed41",
+			"Rev": "d39ed41ab3795346f5f843ec31bc0138be07eaab"
+		},
+		{
+			"ImportPath": "github.com/gin-gonic/gin/json",
+			"Comment": "v1.2-81-gd39ed41",
+			"Rev": "d39ed41ab3795346f5f843ec31bc0138be07eaab"
+		},
+		{
+			"ImportPath": "github.com/gin-gonic/gin/render",
+			"Comment": "v1.2-81-gd39ed41",
+			"Rev": "d39ed41ab3795346f5f843ec31bc0138be07eaab"
+		},
+		{
+			"ImportPath": "github.com/golang/protobuf/proto",
+			"Rev": "0a4f71a498b7c4812f64969510bcb4eca251e33a"
+		},
+		{
+			"ImportPath": "github.com/hashicorp/hcl",
+			"Rev": "392dba7d905ed5d04a5794ba89f558b27e2ba1ca"
+		},
+		{
+			"ImportPath": "github.com/hashicorp/hcl/hcl/ast",
+			"Rev": "392dba7d905ed5d04a5794ba89f558b27e2ba1ca"
+		},
+		{
+			"ImportPath": "github.com/hashicorp/hcl/hcl/parser",
+			"Rev": "392dba7d905ed5d04a5794ba89f558b27e2ba1ca"
+		},
+		{
+			"ImportPath": "github.com/hashicorp/hcl/hcl/scanner",
+			"Rev": "392dba7d905ed5d04a5794ba89f558b27e2ba1ca"
+		},
+		{
+			"ImportPath": "github.com/hashicorp/hcl/hcl/strconv",
+			"Rev": "392dba7d905ed5d04a5794ba89f558b27e2ba1ca"
+		},
+		{
+			"ImportPath": "github.com/hashicorp/hcl/hcl/token",
+			"Rev": "392dba7d905ed5d04a5794ba89f558b27e2ba1ca"
+		},
+		{
+			"ImportPath": "github.com/hashicorp/hcl/json/parser",
+			"Rev": "392dba7d905ed5d04a5794ba89f558b27e2ba1ca"
+		},
+		{
+			"ImportPath": "github.com/hashicorp/hcl/json/scanner",
+			"Rev": "392dba7d905ed5d04a5794ba89f558b27e2ba1ca"
+		},
+		{
+			"ImportPath": "github.com/hashicorp/hcl/json/token",
+			"Rev": "392dba7d905ed5d04a5794ba89f558b27e2ba1ca"
+		},
+		{
+			"ImportPath": "github.com/json-iterator/go",
+			"Comment": "jsoniter-go-0.9.19-18-g8877891",
+			"Rev": "887789156aeca0b292a5080b24e650d856c28933"
+		},
+		{
+			"ImportPath": "github.com/mattn/go-isatty",
+			"Comment": "v0.0.2",
+			"Rev": "fc9e8d8ef48496124e79ae0df75490096eccf6fe"
+		},
+		{
+			"ImportPath": "github.com/ugorji/go/codec",
+			"Rev": "5efa3251c7f7d05e5d9704a69a984ec9f1386a40"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/chacha20poly1305",
+			"Rev": "e7ba82683099cae71475961448ab8f903ea77c26"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/chacha20poly1305/internal/chacha20",
+			"Rev": "e7ba82683099cae71475961448ab8f903ea77c26"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/ed25519",
+			"Rev": "e7ba82683099cae71475961448ab8f903ea77c26"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/ed25519/internal/edwards25519",
+			"Rev": "e7ba82683099cae71475961448ab8f903ea77c26"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/nacl/secretbox",
+			"Rev": "e7ba82683099cae71475961448ab8f903ea77c26"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/poly1305",
+			"Rev": "e7ba82683099cae71475961448ab8f903ea77c26"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/salsa20/salsa",
+			"Rev": "e7ba82683099cae71475961448ab8f903ea77c26"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/sha3",
+			"Rev": "e7ba82683099cae71475961448ab8f903ea77c26"
+		},
+		{
+			"ImportPath": "golang.org/x/sys/unix",
+			"Rev": "0b25a408a50076fbbcae6b7ac0ea5fbb0b085e79"
+		},
+		{
+			"ImportPath": "gopkg.in/go-playground/validator.v8",
+			"Comment": "v8.18.1",
+			"Rev": "5f57d2222ad794d0dffb07e664ea05e2ee07d60c"
+		},
+		{
+			"ImportPath": "gopkg.in/yaml.v2",
+			"Rev": "cd8b52f8269e0feb286dfeef29f8fe4d5b397e0b"
+		}
+	]
+}

@@ -1,0 +1,41 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+GOPATH = ${CURDIR}
+BIN_DIR = ${GOPATH}/bin
+PROJECT_DIR = ${GOPATH}/src/github.com/bitmark-inc/trade
+
+VERSION := $(shell dpkg-parsechangelog -SVersion | sed 's/-[^-]*$//')
+
+override_dh_auto_build:
+	cd "${PROJECT_DIR}" && \
+	  export GOPATH="${GOPATH}" && \
+	  go install -buildmode=exe -ldflags "-X main.version=${VERSION}" .
+
+
+override_dh_auto_install:
+	# install app binary and configuration files
+	etc_dir="debian/tmp/etc" ; \
+	bin_dir="debian/tmp/bin" ; \
+	mkdir -p "$${etc_dir}" "$${bin_dir}" ; \
+	app_base=$$(basename "${PROJECT_DIR}") ; \
+	conf="${PROJECT_DIR}/$${app_base}.conf.sample" ; \
+	[ -f "$${conf}" ] && cp -p "$${conf}" "$${etc_dir}/$${app_base}.conf" || true ; \
+	cp -p "${BIN_DIR}"/* "$${bin_dir}/"
+
+
+override_dh_strip:
+
+
+override_dh_auto_test:
+
+
+override_dh_installinit:
+
+
+override_dh_auto_clean:
+
+
+# default rules
+%:
+	dh $@ --with=systemd
