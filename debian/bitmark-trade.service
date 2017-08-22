@@ -14,7 +14,7 @@ PIDFile=/run/bitmark-trade.pid
 StandardOutput=journal
 StandardError=journal
 
-WorkingDirectory=/var/lib/bitmark-trade
+WorkingDirectory=/var/lib/bitmark
 ExecStart=/usr/sbin/bitmark-trade --conf=/etc/bitmark-trade.conf
 
 [Install]
