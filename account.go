@@ -27,7 +27,7 @@ func createBitmarkAccount() (string, error) {
 	}
 
 	err = db.Update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("account"))
+		b := tx.Bucket([]byte(getAccountBucketName()))
 		return b.Put([]byte(keypair.Account().String()), []byte(keypair.Seed()))
 	})
 	if err != nil {
@@ -41,7 +41,7 @@ func getBitmarkKeypair(account string) (*bitmarklib.KeyPair, error) {
 	var seed string
 
 	err := db.View(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("account"))
+		b := tx.Bucket([]byte(getAccountBucketName()))
 		seed = string(b.Get([]byte(account)))
 		return nil
 	})

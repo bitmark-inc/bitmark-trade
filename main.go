@@ -59,12 +59,7 @@ func openDB(dbpath string) *bolt.DB {
 	}
 
 	db.Update(func(tx *bolt.Tx) error {
-		bucketname := "account-testnet"
-		if cfg.Chain == "live" {
-			bucketname = "account-livenet"
-		}
-
-		_, err := tx.CreateBucketIfNotExists([]byte(bucketname))
+		_, err := tx.CreateBucketIfNotExists([]byte(getAccountBucketName()))
 		if err != nil {
 			panic(fmt.Sprintf("unable to init the databse: %v", err))
 		}
@@ -73,6 +68,15 @@ func openDB(dbpath string) *bolt.DB {
 	})
 
 	return db
+}
+
+func getAccountBucketName() string {
+	bucketname := "account-testnet"
+	if cfg.Chain == "live" {
+		bucketname = "account-livenet"
+	}
+
+	return bucketname
 }
 
 func main() {
