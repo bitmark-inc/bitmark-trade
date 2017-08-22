@@ -6,10 +6,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"mime"
 	"mime/multipart"
 	"net/http"
 	"path/filepath"
-	"regexp"
+	"strings"
 )
 
 type config struct {
@@ -66,7 +67,7 @@ func Init(chain string) {
 			registry: "https://api.test.bitmark.com",
 			storage:  "https://storage.test.bitmark.com",
 		}
-	case "production":
+	case "live":
 		cfg = &config{
 			gateway:  "https://api.bitmark.com",
 			registry: "https://api.bitmark.com",
@@ -163,13 +164,8 @@ func submitReqWithFileResp(url string) (string, []byte, error) {
 		return "", nil, &ServiceError{resp.StatusCode, string(data)}
 	}
 
-	disp := resp.Header.Get("Content-Disposition")
-	filename := "untitled"
-	re := regexp.MustCompile(`filename[^;=\n]*=((['"]).*?|[^;\n]*).enc`)
-	groups := re.FindStringSubmatch(disp)
-	if groups[1] != "" {
-		filename = groups[1]
-	}
+	_, params, _ := mime.ParseMediaType(resp.Header.Get("Content-Disposition"))
+	filename := strings.TrimSuffix(params["filename"], ".enc")
 
 	return filename, data, nil
 }

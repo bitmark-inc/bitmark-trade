@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/bitmark-inc/trade/bmservice"
+	"github.com/bitmark-inc/bitmark-trade/bmservice"
 	"github.com/gin-gonic/gin"
 )
 

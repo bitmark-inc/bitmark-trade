@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/bitmark-inc/trade/bmservice"
+	"github.com/bitmark-inc/bitmark-trade/bmservice"
 	"github.com/boltdb/bolt"
 	"github.com/gin-gonic/gin"
 	"github.com/hashicorp/hcl"
@@ -19,8 +19,8 @@ var (
 
 type config struct {
 	Chain   string `hcl:"chain"`
-	DataDir string `hcl:"datadir"`
 	Port    int    `hcl:"port"`
+	DataDir string `hcl:"datadir"`
 }
 
 func init() {
@@ -32,7 +32,7 @@ func init() {
 
 	db = openDB(fmt.Sprintf("%s/bitmark-trade.db", cfg.DataDir))
 
-	testnet = cfg.Chain != "production"
+	testnet = cfg.Chain != "live"
 
 	bmservice.Init(cfg.Chain)
 }
@@ -59,7 +59,12 @@ func openDB(dbpath string) *bolt.DB {
 	}
 
 	db.Update(func(tx *bolt.Tx) error {
-		_, err := tx.CreateBucketIfNotExists([]byte("account"))
+		bucketname := "account-testnet"
+		if cfg.Chain == "live" {
+			bucketname = "account-livenet"
+		}
+
+		_, err := tx.CreateBucketIfNotExists([]byte(bucketname))
 		if err != nil {
 			panic(fmt.Sprintf("unable to init the databse: %v", err))
 		}

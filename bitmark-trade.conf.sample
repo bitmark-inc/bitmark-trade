@@ -1,5 +1,9 @@
-datadir = "."
+# select the chain of the network
+#chain=live
+chain = "test"
 
-chain = "devel"
-
+# specify the port to run Bitmark trade service
 port = 8080
+
+# all logs and db files are relative to this directory
+datadir = "."
