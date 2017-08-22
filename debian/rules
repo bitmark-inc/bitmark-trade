@@ -3,7 +3,7 @@
 
 GOPATH = ${CURDIR}
 BIN_DIR = ${GOPATH}/bin
-PROJECT_DIR = ${GOPATH}/src/github.com/bitmark-inc/trade
+PROJECT_DIR = ${GOPATH}/src/github.com/bitmark-inc/bitmark-trade
 
 VERSION := $(shell dpkg-parsechangelog -SVersion | sed 's/-[^-]*$//')
 
@@ -18,11 +18,10 @@ override_dh_auto_install:
 	etc_dir="debian/tmp/etc" ; \
 	bin_dir="debian/tmp/bin" ; \
 	mkdir -p "$${etc_dir}" "$${bin_dir}" ; \
-        app_base=$$(basename "${PROJECT_DIR}") ; \
-        app_name="bitmark-trade"; \
-        conf="${PROJECT_DIR}/$${app_name}.conf.sample" ; \
-        [ -f "$${conf}" ] && cp -p "$${conf}" "$${etc_dir}/$${app_name}.conf" || true ; \
-        cp -p "${BIN_DIR}/$${app_base}" "$${bin_dir}/$${app_name}"
+	app_base=$$(basename "${PROJECT_DIR}") ; \
+	conf="${PROJECT_DIR}/$${app_base}.conf.sample" ; \
+	[ -f "$${conf}" ] && cp -p "$${conf}" "$${etc_dir}/$${app_base}.conf" || true ; \
+	cp -p "${BIN_DIR}"/* "$${bin_dir}/"
 
 override_dh_strip:
 
