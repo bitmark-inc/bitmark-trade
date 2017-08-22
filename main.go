@@ -53,7 +53,7 @@ func readConfig(confpath string) *config {
 }
 
 func openDB(dbpath string) *bolt.DB {
-	db, err := bolt.Open(dbpath, 0600, nil)
+	db, err := bolt.Open(dbpath, 0660, nil)
 	if err != nil {
 		panic(fmt.Sprintf("unable to init the databse: %v", err))
 	}
