@@ -13,12 +13,14 @@ import (
 
 var (
 	testnet bool
+	cfg     *config
 	db      *bolt.DB
 )
 
 type config struct {
 	Chain   string `hcl:"chain"`
 	DataDir string `hcl:"datadir"`
+	Port    int    `hcl:"port"`
 }
 
 func init() {
@@ -26,7 +28,7 @@ func init() {
 	flag.StringVar(&confpath, "conf", "", "Specify configuration file")
 	flag.Parse()
 
-	cfg := readConfig(confpath)
+	cfg = readConfig(confpath)
 
 	db = openDB(fmt.Sprintf("%s/bitmark-trade.db", cfg.DataDir))
 
@@ -57,8 +59,12 @@ func openDB(dbpath string) *bolt.DB {
 	}
 
 	db.Update(func(tx *bolt.Tx) error {
-		_, err := tx.CreateBucket([]byte("account"))
-		panic(fmt.Sprintf("unable to init the databse: %v", err))
+		_, err := tx.CreateBucketIfNotExists([]byte("account"))
+		if err != nil {
+			panic(fmt.Sprintf("unable to init the databse: %v", err))
+		}
+
+		return nil
 	})
 
 	return db
@@ -70,5 +76,5 @@ func main() {
 	r.POST("/issue", handleIssue())
 	r.POST("/transfer", handleTransfer())
 	r.GET("/assets/:account/:bitmarkId", handleAssetDownload())
-	r.Run()
+	r.Run(fmt.Sprintf(":%d", cfg.Port))
 }
