@@ -1,3 +1,9 @@
+bitmark-trade (0.2-2) unstable; urgency=medium
+
+  * [updated] default path of datadir
+
+ -- Linzy Hu <linzy@bitmark.com>  Wed, 23 Aug 2017 10:00:00 +0800
+
 bitmark-trade (0.2-1) unstable; urgency=medium
 
   * [fixed] bitmark account creation for livenet and testnet respectively
