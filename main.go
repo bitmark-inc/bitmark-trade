@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 
 	"github.com/bitmark-inc/bitmark-trade/bmservice"
+	"github.com/bitmark-inc/logger"
 	"github.com/boltdb/bolt"
 	"github.com/gin-gonic/gin"
 	"github.com/hashicorp/hcl"
@@ -33,6 +34,16 @@ func init() {
 	db = openDB(fmt.Sprintf("%s/bitmark-trade.db", cfg.DataDir))
 
 	testnet = cfg.Chain != "live"
+
+	if err := logger.Initialise(logger.Configuration{
+		Directory: cfg.DataDir,
+		File:      "trade.log",
+		Size:      1048576,
+		Count:     10,
+		Levels:    map[string]string{"DEFAULT": "info"},
+	}); err != nil {
+		panic(fmt.Sprintf("logger initialization failed: %s", err))
+	}
 
 	bmservice.Init(cfg.Chain)
 }

@@ -11,6 +11,8 @@ import (
 	"net/http"
 	"path/filepath"
 	"strings"
+
+	"github.com/bitmark-inc/logger"
 )
 
 type config struct {
@@ -23,6 +25,7 @@ var (
 	client      *http.Client
 	isTestChain bool
 	cfg         *config
+	log         *logger.L
 )
 
 type ServiceError struct {
@@ -57,8 +60,8 @@ func Init(chain string) {
 		}
 	case "devel":
 		cfg = &config{
-			gateway:  "https://bdgw.devel.bitmark.com",
-			registry: "https://registry.devel.bitmark.com",
+			gateway:  "https://api.devel.bitmark.com",
+			registry: "https://api.devel.bitmark.com",
 			storage:  "https://storage.devel.bitmark.com",
 		}
 	case "test":
@@ -74,6 +77,8 @@ func Init(chain string) {
 			storage:  "https://storage.live.bitmark.com",
 		}
 	}
+
+	log = logger.New("bitmark-service")
 }
 
 func newJSONRequest(method, url string, body interface{}) (*http.Request, error) {

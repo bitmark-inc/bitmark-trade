@@ -1,3 +1,10 @@
+bitmark-trade (0.4-1) unstable; urgency=medium
+
+  * [added] service log
+  * [changed] gateway and registry host
+
+ -- Linzy Hu <linzy@bitmark.com>  Fri, 25 Aug 2017 16:15:00 +0800
+
 bitmark-trade (0.3-1) unstable; urgency=medium
 
   * [updated] default path of datadir
