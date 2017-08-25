@@ -1,6 +1,11 @@
-bitmark-trade (0.4-1) unstable; urgency=medium
+bitmark-trade (0.5-1) unstable; urgency=medium
 
   * [added] service log
+
+ -- Linzy Hu <linzy@bitmark.com>  Fri, 25 Aug 2017 16:30:00 +0800
+
+bitmark-trade (0.4-1) unstable; urgency=medium
+
   * [changed] gateway and registry host
 
  -- Linzy Hu <linzy@bitmark.com>  Fri, 25 Aug 2017 16:15:00 +0800

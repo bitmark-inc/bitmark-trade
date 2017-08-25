@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"crypto/tls"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"mime"
 	"mime/multipart"
@@ -85,11 +84,13 @@ func newJSONRequest(method, url string, body interface{}) (*http.Request, error)
 	b := new(bytes.Buffer)
 	err := json.NewEncoder(b).Encode(body)
 	if err != nil {
+		log.Errorf("%s: %v", url, err)
 		return nil, err
 	}
 
 	req, err := http.NewRequest(method, url, b)
 	if nil != err {
+		log.Errorf("%s: %v", url, err)
 		return nil, err
 	}
 
@@ -102,15 +103,18 @@ func newFileUploadRequest(url, fieldname, filename string, filecontent []byte) (
 
 	part, err := writer.CreateFormFile(fieldname, filepath.Base(filename))
 	if err != nil {
+		log.Errorf("%s: %v", url, err)
 		return nil, err
 	}
 	_, err = part.Write(filecontent)
 	if err != nil {
+		log.Errorf("%s: %v", url, err)
 		return nil, err
 	}
 
 	err = writer.Close()
 	if err != nil {
+		log.Errorf("%s: %v", url, err)
 		return nil, err
 	}
 
@@ -122,12 +126,14 @@ func newFileUploadRequest(url, fieldname, filename string, filecontent []byte) (
 func submitReqWithJSONResp(req *http.Request, reply interface{}) error {
 	resp, err := client.Do(req)
 	if err != nil {
+		log.Errorf("%s: %v", req.URL.String(), err)
 		return err
 	}
 
 	data, err := ioutil.ReadAll(resp.Body)
 	defer resp.Body.Close()
 	if err != nil {
+		log.Errorf("%s: %v", req.URL.String(), err)
 		return err
 	}
 
@@ -138,7 +144,7 @@ func submitReqWithJSONResp(req *http.Request, reply interface{}) error {
 	if reply != nil {
 		err = json.Unmarshal(data, reply)
 		if err != nil {
-			fmt.Println(string(data))
+			log.Errorf("%s: %s", req.URL.String(), string(data))
 			return err
 		}
 	}
@@ -148,20 +154,23 @@ func submitReqWithJSONResp(req *http.Request, reply interface{}) error {
 
 func submitReqWithFileResp(url string) (string, []byte, error) {
 	req, err := http.NewRequest("GET", url, nil)
-	if nil != err {
+	if err != nil {
+		log.Errorf("%s: %v", url, err)
 		return "", nil, err
 	}
 
 	req.Header.Set("Content-Type", "multipart/form-data")
 
 	resp, err := client.Do(req)
-	if nil != err {
+	if err != nil {
+		log.Errorf("%s: %v", url, err)
 		return "", nil, err
 	}
 
 	data, err := ioutil.ReadAll(resp.Body)
 	defer resp.Body.Close()
-	if nil != err {
+	if err != nil {
+		log.Errorf("%s: %v", url, err)
 		return "", nil, err
 	}
 
