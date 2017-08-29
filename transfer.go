@@ -28,7 +28,7 @@ func handleTransfer() gin.HandlerFunc {
 
 		keypair, err := getBitmarkKeypair(tx.Tx.Owner)
 		if err != nil {
-			c.JSON(400, gin.H{"message": "owner not registered"})
+			c.JSON(400, gin.H{"message": "not bitmark owner"})
 			return
 		}
 

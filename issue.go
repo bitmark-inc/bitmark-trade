@@ -68,7 +68,7 @@ func handleIssue() gin.HandlerFunc {
 			return
 		}
 
-		bitmarkIds, err := bmservice.Issue(keypair, req.Name, fingerprint, req.Quantity)
+		bitmarkIds, err := bmservice.Issue(keypair, req.Name, fingerprint, req.Metadata, req.Quantity)
 		if err != nil {
 			checkErr(c, err)
 			return

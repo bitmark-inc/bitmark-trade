@@ -15,8 +15,9 @@ type issueResponse []struct {
 	TxId string `json:"txId"`
 }
 
-func Issue(kp *bitmarklib.KeyPair, name, fingerprint string, quantity int) ([]string, error) {
+func Issue(kp *bitmarklib.KeyPair, name, fingerprint string, metadata map[string]string, quantity int) ([]string, error) {
 	asset := bitmarklib.NewAsset(name, fingerprint)
+	asset.SetMeta(metadata)
 	if err := asset.Sign(kp); err != nil {
 		return nil, err
 	}
