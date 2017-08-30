@@ -1,0 +1,14 @@
+{
+	"comment": "",
+	"ignore": "",
+	"package": [
+		{
+			"checksumSHA1": "eOG3FO3SzsyuvPy36uqWe0Nfogc=",
+			"origin": "github.com/bitmark-inc/bitmark-trade/vendor/github.com/bitmark-inc/go-bitmarklib",
+			"path": "github.com/bitmark-inc/go-bitmarklib",
+			"revision": "c9c7b54e7a74a4c11b778b69c321dc892f53fc9d",
+			"revisionTime": "2017-08-25T03:11:07Z"
+		}
+	],
+	"rootPath": "github.com/bitmark-inc/bitmark-trade"
+}

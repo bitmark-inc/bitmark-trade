@@ -13,6 +13,7 @@ import (
 
 	"golang.org/x/crypto/chacha20poly1305"
 	"golang.org/x/crypto/ed25519"
+	"golang.org/x/crypto/nacl/box"
 )
 
 const (
@@ -23,8 +24,15 @@ const (
 	ciphertextCountSize = 8
 )
 
+type SessionData struct {
+	EncryptedSessionKey          []byte
+	EncryptedSessionKeySignature []byte
+	SessionKeySignature          []byte
+}
+
 type SessionKey interface {
 	String() string
+	Bytes() []byte
 	Encrypt([]byte) ([]byte, error)
 	Decrypt([]byte) ([]byte, error)
 }
@@ -58,6 +66,10 @@ func NewChaCha20SessionKey() (*ChaCha20SessionKey, error) {
 
 func (k *ChaCha20SessionKey) String() string {
 	return hex.EncodeToString(k.key)
+}
+
+func (k *ChaCha20SessionKey) Bytes() []byte {
+	return k.key
 }
 
 func (k *ChaCha20SessionKey) Encrypt(plaintext []byte) ([]byte, error) {
@@ -140,6 +152,20 @@ func CreateEncryptedFile(src, dst string, key SessionKey, bitmarkPrivatekey []by
 	return nil
 }
 
+func CreateEncryptedMessage(msg []byte, key SessionKey, bitmarkPrivatekey []byte) ([]byte, error) {
+	encryptedData, err := key.Encrypt(msg)
+	if err != nil {
+		return nil, err
+	}
+
+	signature := ed25519.Sign(bitmarkPrivatekey, msg)
+
+	b := bytes.NewBuffer(encryptedData)
+	b.Write(signature)
+
+	return b.Bytes(), nil
+}
+
 func CreateDecryptedFile(src, dst string, key SessionKey, bitmarkPublickey []byte) error {
 	content, err := ioutil.ReadFile(src)
 	if err != nil {
@@ -173,4 +199,61 @@ func CreateDecryptedFile(src, dst string, key SessionKey, bitmarkPublickey []byt
 	f.Write(plaintext)
 
 	return nil
+}
+
+func DecryptEncryptedFile(encmsg []byte, key SessionKey, bitmarkPublickey []byte) ([]byte, error) {
+	if len(encmsg) < ed25519.SignatureSize {
+		return nil, errors.New("invalid encrypted file size")
+	}
+	encryptedData := encmsg[:len(encmsg)-ed25519.SignatureSize]
+
+	signature := encmsg[len(encmsg)-ed25519.SignatureSize:]
+
+	if len(signature) != ed25519.SignatureSize {
+		return nil, errors.New("invalid signature size")
+	}
+
+	plaintext, err := key.Decrypt(encryptedData)
+	if err != nil {
+		return nil, err
+	}
+
+	if !ed25519.Verify(bitmarkPublickey, plaintext, signature) {
+		return nil, errors.New("invalid signature")
+	}
+
+	return plaintext, nil
+}
+
+func CreateSessionData(sessKey SessionKey, recipientPublicKey, senderPrivateKey *[32]byte, accountPvtkey []byte) (*SessionData, error) {
+	var nonce [24]byte
+	if _, err := io.ReadFull(rand.Reader, nonce[:]); err != nil {
+		panic(err)
+	}
+	encryptedKey := box.Seal(nonce[:], sessKey.Bytes(), &nonce, recipientPublicKey, senderPrivateKey)
+
+	return &SessionData{
+		EncryptedSessionKey:          encryptedKey,
+		EncryptedSessionKeySignature: ed25519.Sign(accountPvtkey, encryptedKey),
+		SessionKeySignature:          ed25519.Sign(accountPvtkey, sessKey.Bytes()),
+	}, nil
+}
+
+func ParseSessionData(data *SessionData, senderPublicKey, recipientPrivateKey *[32]byte, accountPubkey []byte) (SessionKey, error) {
+	if !ed25519.Verify(accountPubkey, data.EncryptedSessionKey, data.EncryptedSessionKeySignature) {
+		return nil, errors.New("invalid encrypted session key signature")
+	}
+
+	var decryptNonce [24]byte
+	copy(decryptNonce[:], data.EncryptedSessionKey[:24])
+	decrypted, ok := box.Open(nil, data.EncryptedSessionKey[24:], &decryptNonce, senderPublicKey, recipientPrivateKey)
+	if !ok {
+		return nil, errors.New("unable to decrypt")
+	}
+
+	if !ed25519.Verify(accountPubkey, decrypted, data.SessionKeySignature) {
+		return nil, errors.New("invalid session key signature")
+	}
+
+	return &ChaCha20SessionKey{key: decrypted}, nil
 }

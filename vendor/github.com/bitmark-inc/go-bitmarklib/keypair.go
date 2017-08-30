@@ -4,9 +4,11 @@ import (
 	"bytes"
 	"crypto/rand"
 	"fmt"
+
 	"github.com/bitmark-inc/bitmarkd/account"
 	"github.com/bitmark-inc/bitmarkd/util"
 	"golang.org/x/crypto/ed25519"
+	"golang.org/x/crypto/nacl/secretbox"
 	"golang.org/x/crypto/sha3"
 )
 
@@ -182,4 +184,29 @@ func NewKeyPairFromKIF(kif string) (*KeyPair, error) {
 	default:
 		return nil, ErrInvalidAlgorithm
 	}
+}
+
+// Generate a new keypair from a core seed
+func NewKeyPairFromCoreSeed(seed []byte, test bool, algorithm KeyType) (*KeyPair, error) {
+	var secretKey [32]byte
+	copy(secretKey[:], seed)
+
+	encryptedAccessSeed := secretbox.Seal([]byte{}, accountSeedCountBM[:], &seedNonce, &secretKey)
+
+	_, priv, err := ed25519.GenerateKey(bytes.NewBuffer(encryptedAccessSeed))
+	if nil != err {
+		return nil, err
+	}
+
+	privateKey := &account.PrivateKey{
+		PrivateKeyInterface: &account.ED25519PrivateKey{
+			Test:       test,
+			PrivateKey: priv,
+		},
+	}
+
+	return &KeyPair{
+		PrivateKey: privateKey,
+		seed:       seed,
+	}, nil
 }

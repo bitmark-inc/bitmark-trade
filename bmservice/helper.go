@@ -15,9 +15,8 @@ import (
 )
 
 type config struct {
-	gateway  string
-	registry string
-	storage  string
+	core    string
+	storage string
 }
 
 var (
@@ -53,27 +52,23 @@ func Init(chain string) {
 	switch chain {
 	case "local":
 		cfg = &config{
-			gateway:  "https://bdgw.devel.bitmark.com",
-			registry: "https://registry.devel.bitmark.com",
-			storage:  "http://localhost:8900",
+			core:    "https://bdgw.devel.bitmark.com",
+			storage: "http://localhost:8900",
 		}
 	case "devel":
 		cfg = &config{
-			gateway:  "https://api.devel.bitmark.com",
-			registry: "https://api.devel.bitmark.com",
-			storage:  "https://storage.devel.bitmark.com",
+			core:    "https://api.devel.bitmark.com",
+			storage: "https://storage.devel.bitmark.com",
 		}
 	case "test":
 		cfg = &config{
-			gateway:  "https://api.test.bitmark.com",
-			registry: "https://api.test.bitmark.com",
-			storage:  "https://storage.test.bitmark.com",
+			core:    "https://api.test.bitmark.com",
+			storage: "https://storage.test.bitmark.com",
 		}
 	case "live":
 		cfg = &config{
-			gateway:  "https://api.bitmark.com",
-			registry: "https://api.bitmark.com",
-			storage:  "https://storage.live.bitmark.com",
+			core:    "https://api.bitmark.com",
+			storage: "https://storage.live.bitmark.com",
 		}
 	}
 

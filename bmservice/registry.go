@@ -35,7 +35,7 @@ type tx struct {
 // }
 
 func GetTx(txId string) (*tx, error) {
-	url := fmt.Sprintf("%s/v1/txs/%s", cfg.registry, txId)
+	url := fmt.Sprintf("%s/v1/txs/%s", cfg.core, txId)
 	req, err := newJSONRequest("GET", url, nil)
 	if err != nil {
 		return nil, err

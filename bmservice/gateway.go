@@ -32,7 +32,7 @@ func Issue(kp *bitmarklib.KeyPair, name, fingerprint string, metadata map[string
 		issues[i] = issue
 	}
 
-	url := fmt.Sprintf("%s/v1/issue", cfg.gateway)
+	url := fmt.Sprintf("%s/v1/issue", cfg.core)
 	body := issueRequest{
 		Assets: []bitmarklib.Asset{asset},
 		Issues: issues,
@@ -64,7 +64,7 @@ func Transfer(kp *bitmarklib.KeyPair, txId, owner string) (string, error) {
 		return "", err
 	}
 
-	url := fmt.Sprintf("%s/v1/transfer", cfg.gateway)
+	url := fmt.Sprintf("%s/v1/transfer", cfg.core)
 	body := map[string]interface{}{
 		"transfer": transfer,
 	}
