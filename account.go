@@ -1,7 +1,11 @@
 package main
 
 import (
+	"crypto/rand"
+	"io"
 	"net/http"
+
+	"golang.org/x/crypto/nacl/secretbox"
 
 	bitmarklib "github.com/bitmark-inc/go-bitmarklib"
 	"github.com/boltdb/bolt"
@@ -10,7 +14,7 @@ import (
 
 func handleAccountCreation() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		account, err := createBitmarkAccount()
+		account, err := createAccount()
 		if err != nil {
 			c.JSON(http.StatusServiceUnavailable, gin.H{"error": err.Error()})
 			return
@@ -20,39 +24,114 @@ func handleAccountCreation() gin.HandlerFunc {
 	}
 }
 
-func createBitmarkAccount() (string, error) {
-	keypair, err := bitmarklib.NewKeyPair(testnet, bitmarklib.ED25519)
+func createAccount() (string, error) {
+	account, err := NewAccount(testnet)
 	if err != nil {
 		return "", err
 	}
 
 	err = db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(getAccountBucketName()))
-		return b.Put([]byte(keypair.Account().String()), []byte(keypair.Seed()))
+		return b.Put([]byte(account.AccountNumber()), []byte(account.SeedBytes()))
 	})
 	if err != nil {
 		return "", err
 	}
 
-	return keypair.Account().String(), nil
+	return account.AccountNumber(), nil
 }
 
-func getBitmarkKeypair(account string) (*bitmarklib.KeyPair, error) {
-	var seed string
+func getAccount(accountNo string) (*Account, error) {
+	var seed []byte
 
 	err := db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(getAccountBucketName()))
-		seed = string(b.Get([]byte(account)))
+		seed = b.Get([]byte(accountNo))
 		return nil
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	keypair, err := bitmarklib.NewKeyPairFromBase58Seed(seed, testnet, bitmarklib.ED25519)
+	account, err := NewAccountFromSeed(seed, testnet)
 	if err != nil {
 		return nil, err
 	}
 
-	return keypair, nil
+	return account, nil
+}
+
+var (
+	seedNonce = [24]byte{
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	}
+	authSeedCountBM = [16]byte{
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0xe7,
+	}
+	encrSeedCountBM = [16]byte{
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0xe8,
+	}
+)
+
+type Account struct {
+	seed        []byte
+	AuthKeyPair *bitmarklib.KeyPair
+	EncrKeyPair *bitmarklib.EncrKeyPair
+}
+
+func NewAccountFromSeed(seed []byte, test bool) (*Account, error) {
+	var secretKey [32]byte
+	copy(secretKey[:], seed)
+
+	authSeed := createAuthSeed(secretKey)
+	authKeypair, err := bitmarklib.NewKeyPairFromSeed(authSeed, test, bitmarklib.ED25519)
+	if err != nil {
+		return nil, err
+	}
+
+	encrSeed := createEncrSeed(secretKey)
+	encrKeypair, err := bitmarklib.NewEncrKeyPairFromSeed(encrSeed)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Account{seed, authKeypair, encrKeypair}, nil
+}
+
+func NewAccount(test bool) (*Account, error) {
+	seed, err := generateSeed(32)
+	if err != nil {
+		return nil, err
+	}
+
+	return NewAccountFromSeed(seed, test)
+}
+
+func (a *Account) AccountNumber() string {
+	return a.AuthKeyPair.Account().String()
+}
+
+func (a *Account) SeedBytes() []byte {
+	return a.seed
+}
+
+func generateSeed(size int) ([]byte, error) {
+	seed := make([]byte, size)
+	if _, err := io.ReadFull(rand.Reader, seed); err != nil {
+		return nil, err
+	}
+
+	return seed, nil
+}
+
+func createAuthSeed(seed [32]byte) []byte {
+	return secretbox.Seal([]byte{}, authSeedCountBM[:], &seedNonce, &seed)
+}
+
+func createEncrSeed(seed [32]byte) []byte {
+	return secretbox.Seal([]byte{}, encrSeedCountBM[:], &seedNonce, &seed)
 }

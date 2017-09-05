@@ -16,6 +16,7 @@ var (
 	testnet bool
 	cfg     *config
 	db      *bolt.DB
+	log     *logger.L
 )
 
 type config struct {
@@ -46,6 +47,8 @@ func init() {
 	}
 
 	bmservice.Init(cfg.Chain)
+
+	log = logger.New("")
 }
 
 func readConfig(confpath string) *config {
@@ -95,6 +98,6 @@ func main() {
 	r.POST("/account", handleAccountCreation())
 	r.POST("/issue", handleIssue())
 	r.POST("/transfer", handleTransfer())
-	r.GET("/assets/:account/:bitmarkId", handleAssetDownload())
+	r.GET("/assets/:accountNo/:bitmarkId", handleAssetDownload())
 	r.Run(fmt.Sprintf(":%d", cfg.Port))
 }

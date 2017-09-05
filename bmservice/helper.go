@@ -50,11 +50,6 @@ func Init(chain string) {
 	isTestChain = chain != "production"
 
 	switch chain {
-	case "local":
-		cfg = &config{
-			core:    "https://bdgw.devel.bitmark.com",
-			storage: "http://localhost:8900",
-		}
 	case "devel":
 		cfg = &config{
 			core:    "https://api.devel.bitmark.com",
@@ -63,12 +58,12 @@ func Init(chain string) {
 	case "test":
 		cfg = &config{
 			core:    "https://api.test.bitmark.com",
-			storage: "https://storage.test.bitmark.com",
+			storage: "https://assets.test.bitmark.com",
 		}
 	case "live":
 		cfg = &config{
 			core:    "https://api.bitmark.com",
-			storage: "https://storage.live.bitmark.com",
+			storage: "https://assets.bitmark.com",
 		}
 	}
 

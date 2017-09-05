@@ -29,3 +29,16 @@ func ExampleNewKeyPairFromKIF() {
 	fmt.Println(kp)
 	// Output: 2T2LWi7M7Qz9vx3vaMiNCwzreSGEkBMkDcbMhq2Ss5LZTtWWAXUxVjk7N5Gg1guTW1XMHu4wrTXBik8EmVkPvZcK
 }
+
+func ExampleNewPubKeyFromAccount() {
+	account := "fqN6WnjUaekfrqBvvmsjVskoqXnhJ632xJPHzdSgReC6bhZGuP"
+	pubKey, err := bitmarklib.NewPubKeyFromAccount(account)
+	if err != nil {
+		log.Fatal(err)
+	}
+	if !pubKey.IsTesting() {
+		log.Fatal(err)
+	}
+	fmt.Println(pubKey)
+	// Output: fqN6WnjUaekfrqBvvmsjVskoqXnhJ632xJPHzdSgReC6bhZGuP
+}
