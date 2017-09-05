@@ -1,3 +1,9 @@
+bitmark-trade (0.7-1) unstable; urgency=medium
+
+  * [added] support asset encryption
+
+ -- Linzy Hu <linzy@bitmark.com>  Tue, 05 Sep 2017 16:50:00 +0800
+
 bitmark-trade (0.6-1) unstable; urgency=medium
 
   * [fixed] set asset metadata
