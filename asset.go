@@ -26,7 +26,7 @@ func handleAssetDownload() gin.HandlerFunc {
 			return
 		}
 
-		prevOwner, err := getAccount(bitmark.PreviousOwner())
+		prevOwner, err := getAccount(bitmark.PreviousOwner(""))
 		if err != nil {
 			c.JSON(http.StatusNotFound, gin.H{"message": "previous owner not registered in this service"})
 			return

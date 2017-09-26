@@ -1,3 +1,10 @@
+bitmark-trade (0.8-1) unstable; urgency=medium
+
+  * [fixed] disable account creation from nil seed
+  * [updated] enable retry in transfer for updating session data
+
+ -- Linzy Hu <linzy@bitmark.com>  Tue, 26 Sep 2017 11:20:00 +0800
+
 bitmark-trade (0.7-1) unstable; urgency=medium
 
   * [added] support asset encryption

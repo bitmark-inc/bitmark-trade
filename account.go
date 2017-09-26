@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/rand"
+	"fmt"
 	"io"
 	"net/http"
 
@@ -32,7 +33,7 @@ func createAccount() (string, error) {
 
 	err = db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(getAccountBucketName()))
-		return b.Put([]byte(account.AccountNumber()), []byte(account.SeedBytes()))
+		return b.Put([]byte(account.AccountNumber()), account.SeedBytes())
 	})
 	if err != nil {
 		return "", err
@@ -51,6 +52,10 @@ func getAccount(accountNo string) (*Account, error) {
 	})
 	if err != nil {
 		return nil, err
+	}
+
+	if seed == nil {
+		return nil, fmt.Errorf("account %s not registered", accountNo)
 	}
 
 	account, err := NewAccountFromSeed(seed, testnet)

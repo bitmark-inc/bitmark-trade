@@ -39,7 +39,7 @@ func handleTransfer() gin.HandlerFunc {
 			checkErr(c, err)
 			return
 		}
-		prevOwner, err := getAccount(bitmark.PreviousOwner())
+		prevOwner, err := getAccount(bitmark.PreviousOwner(req.TxId))
 		if err != nil {
 			c.JSON(400, gin.H{"message": "previous owner not registered"})
 			return
@@ -52,16 +52,23 @@ func handleTransfer() gin.HandlerFunc {
 			return
 		}
 
-		transfer, _ := bitmarklib.NewTransfer(req.TxId, req.NextOnwer, testnet)
-		err = transfer.Sign(owner.AuthKeyPair)
-		if err != nil {
-			c.JSON(400, gin.H{"message": "unable to sign"})
-			return
-		}
-		txId, err := bmservice.TransferBitmark(transfer)
-		if err != nil {
-			checkErr(c, err)
-			return
+		log.Infof("%s | %s | %s", prevOwner.AccountNumber(), owner.AccountNumber(), nextOwner.AccountNumber())
+
+		var txId string
+		if bitmark.Owner != req.NextOnwer {
+			transfer, _ := bitmarklib.NewTransfer(req.TxId, req.NextOnwer, testnet)
+			err = transfer.Sign(owner.AuthKeyPair)
+			if err != nil {
+				c.JSON(400, gin.H{"message": "unable to sign"})
+				return
+			}
+			txId, err = bmservice.TransferBitmark(transfer)
+			if err != nil {
+				checkErr(c, err)
+				return
+			}
+		} else {
+			txId = bitmark.HeadId
 		}
 
 		sessData, err := bmservice.GetSessionData(owner.AccountNumber(), tx.Tx.BitmarkId)

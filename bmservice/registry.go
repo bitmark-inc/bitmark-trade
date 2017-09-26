@@ -18,12 +18,27 @@ type bitmark struct {
 	Provenance []holder `json:"provenance"`
 }
 
-func (b *bitmark) PreviousOwner() string {
-	if b.HeadId == b.Id {
-		return b.Provenance[0].Owner
+// func (b *bitmark) PreviousOwner() string {
+// 	if b.HeadId == b.Id {
+// 		return b.Provenance[0].Owner
+// 	}
+//
+// 	return b.Provenance[1].Owner
+// }
+
+func (b *bitmark) PreviousOwner(txId string) string {
+	var index int
+	for i, holder := range b.Provenance {
+		if holder.TxId == txId {
+			index = i
+			break
+		}
 	}
 
-	return b.Provenance[1].Owner
+	if index == len(b.Provenance)-1 {
+		return b.Provenance[index].Owner
+	}
+	return b.Provenance[index+1].Owner
 }
 
 type tx struct {
