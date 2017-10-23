@@ -18,6 +18,11 @@ type issueResponse []struct {
 	TxId string `json:"txId"`
 }
 
+type registerEncrPubkeyRequest struct {
+	Key       string `json:"encryption_pubkey"`
+	Signature string `json:"signature"`
+}
+
 func IssueBitmark(asset bitmarklib.Asset, issues []bitmarklib.Issue) ([]string, error) {
 	url := fmt.Sprintf("%s/v1/issue", cfg.core)
 	body := issueRequest{
@@ -57,6 +62,41 @@ func TransferBitmark(transfer *bitmarklib.Transfer) (string, error) {
 	}
 
 	return reply[0].TxId, nil
+}
+
+func RegisterEncrPubkey(accountNo string, key []byte, signature []byte) error {
+	url := fmt.Sprintf("%s/v1/encryption_keys/%s", cfg.core, accountNo)
+	body := registerEncrPubkeyRequest{
+		hex.EncodeToString(key),
+		hex.EncodeToString(signature),
+	}
+	req, err := newJSONRequest("POST", url, body)
+	if err != nil {
+		return err
+	}
+
+	return submitReqWithJSONResp(req, nil)
+}
+
+func GetEncrPubkey(accountNo string) (*[32]byte, error) {
+	url := fmt.Sprintf("%s/v1/encryption_keys/%s", cfg.core, accountNo)
+	req, err := newJSONRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	var resp struct {
+		EncryptionPublicKey string `json:"encryption_pubkey"`
+	}
+	if err := submitReqWithJSONResp(req, &resp); err != nil {
+		return nil, err
+	}
+	r, _ := hex.DecodeString(resp.EncryptionPublicKey)
+
+	var key [32]byte
+	copy(key[:], r)
+
+	return &key, nil
 }
 
 func UpdateSessionData(k *bitmarklib.KeyPair, sessionData *bitmarklib.SessionData, bitmarkId, accountNo string) error {

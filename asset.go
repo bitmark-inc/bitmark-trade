@@ -26,15 +26,20 @@ func handleAssetDownload() gin.HandlerFunc {
 			return
 		}
 
-		prevOwner, err := getAccount(bitmark.PreviousOwner(""))
+		prevOwnerEncrPubkey, err := bmservice.GetEncrPubkey(bitmark.PreviousOwner(""))
 		if err != nil {
-			c.JSON(http.StatusNotFound, gin.H{"message": "previous owner not registered in this service"})
+			c.JSON(http.StatusNotFound, gin.H{"message": "encr public key of the previous owner not found"})
+			return
+		}
+		prevOwnerAuthPubkey, err := authPublicKeyFromAccountNumber(bitmark.PreviousOwner(""))
+		if err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"message": "auth public key of the previous owner not found"})
 			return
 		}
 
-		issuer, err := getAccount(bitmark.Issuer)
+		issuerAuthPubkey, err := authPublicKeyFromAccountNumber(bitmark.Issuer)
 		if err != nil {
-			c.JSON(http.StatusNotFound, gin.H{"message": "issuer not registered in this service"})
+			c.JSON(http.StatusNotFound, gin.H{"message": "auth public key of the issuer not found"})
 			return
 		}
 
@@ -50,7 +55,7 @@ func handleAssetDownload() gin.HandlerFunc {
 			return
 		}
 
-		sessKey, err := bitmarklib.SessionKeyFromSessionData(sessData, prevOwner.EncrKeyPair.PublicKey, owner.EncrKeyPair.PrivateKey, prevOwner.AuthKeyPair.Account().PublicKeyBytes())
+		sessKey, err := bitmarklib.SessionKeyFromSessionData(sessData, prevOwnerEncrPubkey, owner.EncrKeyPair.PrivateKey, prevOwnerAuthPubkey.PublicKeyBytes())
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"message": "wrong encryption from the previous owner",
@@ -59,7 +64,7 @@ func handleAssetDownload() gin.HandlerFunc {
 			return
 		}
 
-		plaintext, err := bitmarklib.DecryptAssetFile(ciphertext, sessKey, issuer.AuthKeyPair.Account().PublicKeyBytes())
+		plaintext, err := bitmarklib.DecryptAssetFile(ciphertext, sessKey, issuerAuthPubkey.PublicKeyBytes())
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"message": "wrong encryption from the previous owner",

@@ -6,8 +6,10 @@ import (
 	"io"
 	"net/http"
 
+	"golang.org/x/crypto/ed25519"
 	"golang.org/x/crypto/nacl/secretbox"
 
+	"github.com/bitmark-inc/bitmark-trade/bmservice"
 	bitmarklib "github.com/bitmark-inc/go-bitmarklib"
 	"github.com/boltdb/bolt"
 	"github.com/gin-gonic/gin"
@@ -35,6 +37,13 @@ func createAccount() (string, error) {
 		b := tx.Bucket([]byte(getAccountBucketName()))
 		return b.Put([]byte(account.AccountNumber()), account.SeedBytes())
 	})
+	if err != nil {
+		return "", err
+	}
+
+	sig := ed25519.Sign(account.AuthKeyPair.PrivateKeyBytes(), account.EncrKeyPair.PublicKey[:])
+	err = bmservice.RegisterEncrPubkey(
+		account.AccountNumber(), account.EncrKeyPair.PublicKey[:], sig)
 	if err != nil {
 		return "", err
 	}
@@ -139,4 +148,8 @@ func createAuthSeed(seed [32]byte) []byte {
 
 func createEncrSeed(seed [32]byte) []byte {
 	return secretbox.Seal([]byte{}, encrSeedCountBM[:], &seedNonce, &seed)
+}
+
+func authPublicKeyFromAccountNumber(acctNo string) (*bitmarklib.PublicKey, error) {
+	return bitmarklib.NewPubKeyFromAccount(acctNo)
 }

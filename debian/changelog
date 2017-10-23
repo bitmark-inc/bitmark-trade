@@ -1,3 +1,10 @@
+bitmark-trade (0.9-1) unstable; urgency=medium
+
+  * [updated] register the encryption public key when creating a new account
+  * [updated] get the encryption public key from API instead of account database
+
+ -- Linzy Hu <linzy@bitmark.com>  Mon, 22 Oct 2017 20:30:00 +0800
+
 bitmark-trade (0.8-1) unstable; urgency=medium
 
   * [fixed] disable account creation from nil seed

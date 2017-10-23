@@ -45,14 +45,13 @@ func handleTransfer() gin.HandlerFunc {
 			return
 		}
 
-		// extract the next owner
-		nextOwner, err := getAccount(req.NextOnwer)
+		nextOwnerEncrPubkey, err := bmservice.GetEncrPubkey(req.NextOnwer)
 		if err != nil {
-			c.JSON(400, gin.H{"message": "next owner not registered"})
+			c.JSON(http.StatusNotFound, gin.H{"message": "encr public key of the previous owner not found"})
 			return
 		}
 
-		log.Infof("%s | %s | %s", prevOwner.AccountNumber(), owner.AccountNumber(), nextOwner.AccountNumber())
+		log.Infof("%s | %s | %s", prevOwner.AccountNumber(), owner.AccountNumber(), req.NextOnwer)
 
 		var txId string
 		if bitmark.Owner != req.NextOnwer {
@@ -83,13 +82,13 @@ func handleTransfer() gin.HandlerFunc {
 			return
 		}
 
-		newSessionData, err := bitmarklib.CreateSessionData(sessKey, nextOwner.EncrKeyPair.PublicKey, owner.EncrKeyPair.PrivateKey, owner.AuthKeyPair.PrivateKeyBytes())
+		newSessionData, err := bitmarklib.CreateSessionData(sessKey, nextOwnerEncrPubkey, owner.EncrKeyPair.PrivateKey, owner.AuthKeyPair.PrivateKeyBytes())
 		if err != nil {
 			c.JSON(400, gin.H{"message": "unable to create session data"})
 			return
 		}
 
-		err = bmservice.UpdateSessionData(owner.AuthKeyPair, newSessionData, tx.Tx.BitmarkId, nextOwner.AccountNumber())
+		err = bmservice.UpdateSessionData(owner.AuthKeyPair, newSessionData, tx.Tx.BitmarkId, req.NextOnwer)
 		if err != nil {
 			checkErr(c, err)
 			return
