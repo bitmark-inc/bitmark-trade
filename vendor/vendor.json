@@ -3,10 +3,48 @@
 	"ignore": "",
 	"package": [
 		{
+			"checksumSHA1": "UbPP6vvSWxYJx4ixL4a/anlO/9A=",
+			"path": "github.com/bitmark-inc/bitmark-sdk-go",
+			"revision": "3853556ef021ac96912850fdc33d2b3011d2f658",
+			"revisionTime": "2018-01-02T10:17:06Z"
+		},
+		{
 			"checksumSHA1": "H81I+hAaA1hRwClI5oApkF999GQ=",
 			"path": "github.com/bitmark-inc/go-bitmarklib",
 			"revision": "5f4e12b9aae8af5a52af6bdd9394fb8616335a76",
 			"revisionTime": "2017-09-04T09:39:40Z"
+		},
+		{
+			"checksumSHA1": "OFu4xJEIjiI8Suu+j/gabfp+y6Q=",
+			"origin": "github.com/stretchr/testify/vendor/github.com/davecgh/go-spew/spew",
+			"path": "github.com/davecgh/go-spew/spew",
+			"revision": "05e8a0eda380579888eb53c394909df027f06991",
+			"revisionTime": "2017-07-13T16:51:06Z"
+		},
+		{
+			"checksumSHA1": "zKKp5SZ3d3ycKe4EKMNT0BqAWBw=",
+			"origin": "github.com/stretchr/testify/vendor/github.com/pmezard/go-difflib/difflib",
+			"path": "github.com/pmezard/go-difflib/difflib",
+			"revision": "05e8a0eda380579888eb53c394909df027f06991",
+			"revisionTime": "2017-07-13T16:51:06Z"
+		},
+		{
+			"checksumSHA1": "TpQdKdG6Q7yBpMBTecSP6RKj/Iw=",
+			"path": "github.com/stretchr/testify/assert",
+			"revision": "05e8a0eda380579888eb53c394909df027f06991",
+			"revisionTime": "2017-07-13T16:51:06Z"
+		},
+		{
+			"checksumSHA1": "rtZu+XLnzbnOuw48ovjddYaQ138=",
+			"path": "golang.org/x/crypto/curve25519",
+			"revision": "faadfbdc035307d901e69eea569f5dda451a3ee3",
+			"revisionTime": "2017-09-12T19:17:24Z"
+		},
+		{
+			"checksumSHA1": "8TdbYko3r1qoeDhCFCo4SQM1pyY=",
+			"path": "golang.org/x/crypto/nacl/box",
+			"revision": "faadfbdc035307d901e69eea569f5dda451a3ee3",
+			"revisionTime": "2017-09-12T19:17:24Z"
 		}
 	],
 	"rootPath": "github.com/bitmark-inc/bitmark-trade"
