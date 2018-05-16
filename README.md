@@ -6,7 +6,7 @@
 Make sure you have a working Go environment. [See the install instructions for Go.](https://golang.org/doc/install)
 
 ```shell
-$ go get golang.org/x/tour/gotour
+$ go get github.com/bitmark-inc/bitmark-trade
 ```
 
 ## How to run bitmark trade?
