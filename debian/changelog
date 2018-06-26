@@ -2,7 +2,7 @@ bitmark-trade (0.11-1) unstable; urgency=medium
 
   * [fixed] livenet network setting
 
- -- Linzy Hu <linzy@bitmark.com>  Tue, 26 Jue 2018 15:12:00 +0800
+ -- Linzy Hu <linzy@bitmark.com>  Tue, 26 Jun 2018 15:12:00 +0800
 
 bitmark-trade (0.10-1) unstable; urgency=medium
 
