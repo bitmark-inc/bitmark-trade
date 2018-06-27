@@ -41,7 +41,7 @@ func init() {
 			HTTPClient:  &http.Client{Timeout: 5 * time.Second},
 			Network:     bmksdk.Testnet,
 			APIEndpoint: "https://api.test.bitmark.com",
-			KeyEndpoint: "https://key.assets.test.bitmark.com",
+			KeyEndpoint: "https://key.test.bitmarkaccountassets.com",
 		}
 		bmk = bmksdk.NewClient(cfg)
 	case "live":
@@ -49,7 +49,7 @@ func init() {
 			HTTPClient:  &http.Client{Timeout: 5 * time.Second},
 			Network:     bmksdk.Livenet,
 			APIEndpoint: "https://api.bitmark.com",
-			KeyEndpoint: "https://key.assets.bitmark.com",
+			KeyEndpoint: "https://key.bitmarkaccountassets.com",
 		}
 		bmk = bmksdk.NewClient(cfg)
 	}

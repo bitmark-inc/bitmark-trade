@@ -1,3 +1,9 @@
+bitmark-trade (0.12-1) unstable; urgency=medium
+
+  * [fixed] encryption public key domain
+
+ -- Linzy Hu <linzy@bitmark.com>  Wed, 27 Jun 2018 09:46:00 +0800
+
 bitmark-trade (0.11-2) unstable; urgency=medium
 
   * [fixed] livenet network setting
