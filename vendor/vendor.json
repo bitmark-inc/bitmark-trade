@@ -3,10 +3,13 @@
 	"ignore": "",
 	"package": [
 		{
-			"checksumSHA1": "UbPP6vvSWxYJx4ixL4a/anlO/9A=",
+			"checksumSHA1": "glpAdF47rpWUB33gwwF272hwCtk=",
 			"path": "github.com/bitmark-inc/bitmark-sdk-go",
-			"revision": "3853556ef021ac96912850fdc33d2b3011d2f658",
-			"revisionTime": "2018-01-02T10:17:06Z"
+			"revision": "2ea8fc3d849ce6ac61fb217d61c74bbedc93bbb0",
+			"revisionTime": "2019-01-08T07:27:56Z",
+			"tree": true,
+			"version": "v2",
+			"versionExact": "v2.0.0"
 		},
 		{
 			"checksumSHA1": "H81I+hAaA1hRwClI5oApkF999GQ=",
@@ -22,6 +25,12 @@
 			"revisionTime": "2017-07-13T16:51:06Z"
 		},
 		{
+			"checksumSHA1": "OcccXyUyAcMI52BWzbfQ2Wox1cs=",
+			"path": "github.com/konsorten/go-windows-terminal-sequences",
+			"revision": "5c8c8bd35d3832f5d134ae1e1e375b69a4d25242",
+			"revisionTime": "2018-10-04T22:41:46Z"
+		},
+		{
 			"checksumSHA1": "zKKp5SZ3d3ycKe4EKMNT0BqAWBw=",
 			"origin": "github.com/stretchr/testify/vendor/github.com/pmezard/go-difflib/difflib",
 			"path": "github.com/pmezard/go-difflib/difflib",
@@ -29,10 +38,34 @@
 			"revisionTime": "2017-07-13T16:51:06Z"
 		},
 		{
+			"checksumSHA1": "faGWQB7LA+yvwD2OMIFtXr716R4=",
+			"path": "github.com/sirupsen/logrus",
+			"revision": "eef6b768ab01a0598a0a6db97bad2a37d31df1d1",
+			"revisionTime": "2019-01-05T01:46:35Z"
+		},
+		{
+			"checksumSHA1": "jDsR9gpxYB6YBduE5qD8FmLiYv0=",
+			"path": "github.com/sirupsen/logrus/hooks/syslog",
+			"revision": "eef6b768ab01a0598a0a6db97bad2a37d31df1d1",
+			"revisionTime": "2019-01-05T01:46:35Z"
+		},
+		{
+			"checksumSHA1": "zt1WCAJyLKq610bOl7+09HjSKp4=",
+			"path": "github.com/sirupsen/logrus/internal/testutils",
+			"revision": "eef6b768ab01a0598a0a6db97bad2a37d31df1d1",
+			"revisionTime": "2019-01-05T01:46:35Z"
+		},
+		{
 			"checksumSHA1": "TpQdKdG6Q7yBpMBTecSP6RKj/Iw=",
 			"path": "github.com/stretchr/testify/assert",
 			"revision": "05e8a0eda380579888eb53c394909df027f06991",
 			"revisionTime": "2017-07-13T16:51:06Z"
+		},
+		{
+			"checksumSHA1": "ZGs4vA+UZ880IKyl8CRkeKdhWdg=",
+			"path": "github.com/stretchr/testify/require",
+			"revision": "ffdc059bfe9ce6a4e144ba849dbedead332c6053",
+			"revisionTime": "2018-12-05T02:12:43Z"
 		},
 		{
 			"checksumSHA1": "rtZu+XLnzbnOuw48ovjddYaQ138=",
@@ -45,6 +78,18 @@
 			"path": "golang.org/x/crypto/nacl/box",
 			"revision": "faadfbdc035307d901e69eea569f5dda451a3ee3",
 			"revisionTime": "2017-09-12T19:17:24Z"
+		},
+		{
+			"checksumSHA1": "O9geq5DoVNMXH69IanBCv0ydtp0=",
+			"path": "golang.org/x/crypto/ssh/terminal",
+			"revision": "ff983b9c42bc9fbf91556e191cc8efb585c16908",
+			"revisionTime": "2018-07-25T11:53:45Z"
+		},
+		{
+			"checksumSHA1": "WoSat9PbqZFXREek5bkUBr256/Q=",
+			"path": "golang.org/x/sys/windows",
+			"revision": "20be8e55dc7b4b7a1b1660728164a8509d8c9209",
+			"revisionTime": "2018-12-06T17:37:29Z"
 		}
 	],
 	"rootPath": "github.com/bitmark-inc/bitmark-trade"

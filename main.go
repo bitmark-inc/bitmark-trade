@@ -5,10 +5,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"time"
 
 	bmksdk "github.com/bitmark-inc/bitmark-sdk-go"
-	"github.com/bitmark-inc/bitmark-trade/bmservice"
 	"github.com/bitmark-inc/logger"
 	"github.com/boltdb/bolt"
 	"github.com/gin-gonic/gin"
@@ -16,59 +14,16 @@ import (
 )
 
 var (
-	cfg *config
-	db  *bolt.DB
-	log *logger.L
-	bmk *bmksdk.Client
+	service *Service
+	db      *bolt.DB
+	log     *logger.L
 )
 
 type config struct {
-	Chain   string `hcl:"chain"`
-	Port    int    `hcl:"port"`
-	DataDir string `hcl:"datadir"`
-}
-
-func init() {
-	var confpath string
-	flag.StringVar(&confpath, "conf", "", "Specify configuration file")
-	flag.Parse()
-
-	cfg = readConfig(confpath)
-
-	switch cfg.Chain {
-	case "test":
-		cfg := &bmksdk.Config{
-			HTTPClient:  &http.Client{Timeout: 5 * time.Second},
-			Network:     bmksdk.Testnet,
-			APIEndpoint: "https://api.test.bitmark.com",
-			KeyEndpoint: "https://key.test.bitmarkaccountassets.com",
-		}
-		bmk = bmksdk.NewClient(cfg)
-	case "live":
-		cfg := &bmksdk.Config{
-			HTTPClient:  &http.Client{Timeout: 5 * time.Second},
-			Network:     bmksdk.Livenet,
-			APIEndpoint: "https://api.bitmark.com",
-			KeyEndpoint: "https://key.bitmarkaccountassets.com",
-		}
-		bmk = bmksdk.NewClient(cfg)
-	}
-
-	db = openDB(fmt.Sprintf("%s/bitmark-trade.db", cfg.DataDir))
-
-	if err := logger.Initialise(logger.Configuration{
-		Directory: cfg.DataDir,
-		File:      "trade.log",
-		Size:      1048576,
-		Count:     10,
-		Levels:    map[string]string{"DEFAULT": "info"},
-	}); err != nil {
-		panic(fmt.Sprintf("logger initialization failed: %s", err))
-	}
-
-	bmservice.Init(cfg.Chain)
-
-	log = logger.New("")
+	Chain    string `hcl:"chain"`
+	Port     int    `hcl:"port"`
+	DataDir  string `hcl:"datadir"`
+	APIToken string `hcl:"api_token"`
 }
 
 func readConfig(confpath string) *config {
@@ -104,20 +59,59 @@ func openDB(dbpath string) *bolt.DB {
 	return db
 }
 
-func getAccountBucketName() []byte {
-	bucketname := "account-testnet"
-	if cfg.Chain == "live" {
-		bucketname = "account-livenet"
+func main() {
+	var confpath string
+	flag.StringVar(&confpath, "conf", "", "Specify configuration file")
+	flag.Parse()
+
+	cfg := readConfig(confpath)
+
+	var sdkcfg bmksdk.Config
+	switch cfg.Chain {
+	case "test":
+		sdkcfg = bmksdk.Config{
+			HTTPClient: http.DefaultClient,
+			Network:    bmksdk.Testnet,
+			APIToken:   cfg.APIToken,
+		}
+		service = &Service{
+			http.DefaultClient,
+			"https://api.test.bitmark.com",
+			"https://key.test.bitmarkaccountassets.com",
+		}
+	case "live":
+		sdkcfg = bmksdk.Config{
+			HTTPClient: http.DefaultClient,
+			Network:    bmksdk.Livenet,
+			APIToken:   cfg.APIToken,
+		}
+		service = &Service{
+			http.DefaultClient,
+			"https://api.bitmark.com",
+			"https://key.bitmarkaccountassets.com",
+		}
 	}
 
-	return []byte(bucketname)
-}
+	bmksdk.Init(&sdkcfg)
 
-func main() {
+	db = openDB(fmt.Sprintf("%s/bitmark-trade.db", cfg.DataDir))
+
+	if err := logger.Initialise(logger.Configuration{
+		Directory: cfg.DataDir,
+		File:      "trade.log",
+		Size:      1048576,
+		Count:     10,
+		Levels:    map[string]string{"DEFAULT": "info"},
+	}); err != nil {
+		panic(fmt.Sprintf("logger initialization failed: %s", err))
+	}
+
+	log = logger.New("")
+
 	r := gin.Default()
-	r.POST("/account", handleAccountCreation())
-	r.POST("/issue", handleIssue())
-	r.POST("/transfer", handleTransfer())
-	r.GET("/assets/:accountNo/:bitmarkId", handleAssetDownload())
+	r.POST("/account", createAccount())
+	r.POST("/issue", issueBitmarks())
+	r.POST("/transfer", transferBitmark())
+	r.GET("/assets/:accountNo/:bitmarkId", downloadAsset())
 	r.Run(fmt.Sprintf(":%d", cfg.Port))
 }

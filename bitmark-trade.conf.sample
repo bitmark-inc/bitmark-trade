@@ -7,3 +7,6 @@ port = 8080
 
 # all logs and db files are relative to this directory
 datadir = "/var/lib/bitmark"
+
+# provide the token for using bitmark API
+api_token = "12345678"

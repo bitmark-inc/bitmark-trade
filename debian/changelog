@@ -1,3 +1,9 @@
+bitmark-trade (0.13-1) unstable; urgency=medium
+
+  * [updated] migrate to sdk v2
+
+ -- Linzy Hu <linzy@bitmark.com>  Wed, 09 Jan 2019 12:00:00 +0800
+
 bitmark-trade (0.12-1) unstable; urgency=medium
 
   * [fixed] encryption public key domain
