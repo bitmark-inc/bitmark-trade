@@ -23,6 +23,9 @@ port = 8080
 
 # all logs and db files are relative to this directory
 datadir = "/var/lib/bitmark"
+
+# provide the token for using bitmark API; please contact us for applying the token
+api_token = "12345678"
 ```
 
 2. Run the following command to start the service.
